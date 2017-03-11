@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_note"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.twonote.mohamed.twonote.activities.AddNoteActivity"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:focusableInTouchMode="true"
+        android:hint="Title"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/editText2"
+        android:hint="Description"
+        android:layout_weight="0.99"
+        android:gravity="top"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:id="@+id/button"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/background_light"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:drawableTop="@drawable/ic_check_black_24dp"
+        android:onClick="addNote"
+        />
+
+
+</LinearLayout>
