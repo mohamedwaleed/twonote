@@ -2,10 +2,28 @@ package com.twonote.mohamed.twonote.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
 public class NoteContentProvider extends ContentProvider {
+
+    public static final int CODE_NOTES = 100;
+
+    private NoteDbHelper noteDbHelper;
+
+    private UriMatcher uriMatcher = buildUriMatcher();
+
+    private static UriMatcher buildUriMatcher() {
+
+        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        String authority = NoteContract.CONTENT_AUTHORITY;
+
+        uriMatcher.addURI(authority, NoteContract.PATH_NOTES, CODE_NOTES);
+
+        return uriMatcher;
+    }
+
     public NoteContentProvider() {
     }
 
@@ -30,8 +48,8 @@ public class NoteContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        // TODO: Implement this to initialize your content provider on startup.
-        return false;
+        noteDbHelper = new NoteDbHelper(getContext());
+        return true;
     }
 
     @Override
