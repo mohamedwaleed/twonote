@@ -27,7 +27,6 @@ import java.util.Calendar;
 
 public class NotificationUtility {
 
-    private static final int NOTE_NOTIFICATION_ID = 3004;
 
     public static void sendNoteNotification(Context context, String noteTitle, int noteId, int noteType) {
         Resources resources = context.getResources();
@@ -76,8 +75,7 @@ public class NotificationUtility {
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                /* WEATHER_NOTIFICATION_ID allows you to update or cancel the notification later on */
-        notificationManager.notify(NOTE_NOTIFICATION_ID, notificationBuilder.build());
+        notificationManager.notify(noteId, notificationBuilder.build());
     }
 
 
