@@ -25,6 +25,7 @@ import com.twonote.mohamed.twonote.db.NoteContract;
 import com.twonote.mohamed.twonote.receivers.NoteReceiver;
 import com.twonote.mohamed.twonote.utils.DateUtility;
 import com.twonote.mohamed.twonote.utils.NoteType;
+import com.twonote.mohamed.twonote.utils.NotificationUtility;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -86,28 +87,8 @@ public class AddNoteActivity extends AppCompatActivity {
                 int noteId = (int) ContentUris.parseId(uri);
 
                 if(selectedDate != null && selectedTime != null) {
-                        Log.e("Eee", alarmDateTime);
-                        Calendar selectedDate = Calendar.getInstance();
-                        selectedDate.set(Calendar.YEAR, selectedDate.get(Calendar.YEAR));
-                        selectedDate.set(Calendar.MONTH, selectedDate.get(Calendar.MONTH));
-                        selectedDate.set(Calendar.DAY_OF_MONTH, selectedDate.get(Calendar.DAY_OF_MONTH));
-                        timeCalendar.set(Calendar.HOUR_OF_DAY, selectedDate.get(Calendar.HOUR_OF_DAY));
-                        timeCalendar.set(Calendar.MINUTE, selectedDate.get(Calendar.MINUTE));
-
-                        intent = new Intent(this, NoteReceiver.class);
-                        intent.putExtra(NoteContract.NoteEntry._ID, noteId);
-                        intent.putExtra(NoteContract.NoteEntry.COLUMN_TITLE, noteTitle);
-                        intent.putExtra(NoteContract.NoteEntry.COLUMN_DESCRIPTION, noteDescription);
-                        intent.putExtra(NoteContract.NoteEntry.COLUMN_TYPE, NoteType.TEXT);
-                        intent.putExtra(NoteContract.NoteEntry.CREATION_DATE, currentDate);
-                        intent.putExtra(NoteContract.NoteEntry.ALARM_DATE, alarmDateTime);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1253, intent, PendingIntent.FLAG_UPDATE_CURRENT | Intent.FILL_IN_DATA);
-
-                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, selectedDate.getTimeInMillis(), pendingIntent);
-
-
+                    Log.e("Eee", alarmDateTime);
+                    NotificationUtility.scheduleNoteAlarm(this, noteTitle, noteDescription, alarmDateTime, currentDate, noteId);
                 }
 
                 break;
@@ -116,6 +97,8 @@ public class AddNoteActivity extends AppCompatActivity {
         finish();
 
     }
+
+
 
     public void setAlarm(View view) {
 

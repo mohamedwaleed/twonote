@@ -35,7 +35,6 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.twonote.mohamed.twonote.R;
 import com.twonote.mohamed.twonote.adapters.NotesAdapter;
 import com.twonote.mohamed.twonote.db.NoteContract;
-import com.twonote.mohamed.twonote.services.OcrDetectorProcessor;
 import com.twonote.mohamed.twonote.utils.DateUtility;
 import com.twonote.mohamed.twonote.utils.NoteType;
 
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 addTextNoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                         Intent intent = new Intent(MainActivity.this,AddNoteActivity.class);
                         intent.putExtra(Intent.EXTRA_TEXT, NoteType.TEXT);
                         startActivity(intent);
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 addImageNoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                            alertDialog.hide();
+                            alertDialog.dismiss();
 
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
