@@ -12,7 +12,7 @@ public class NoteDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "note.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
     public NoteDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,26 +32,21 @@ public class NoteDbHelper extends SQLiteOpenHelper {
 
                         NoteEntry.COLUMN_TITLE       + " VARCHAR(20) NOT NULL, "                 +
 
-                        NoteEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL,"                  +
+                        NoteEntry.COLUMN_DESCRIPTION + " TEXT,"                  +
 
-                        NoteEntry.COLUMN_TYPE   + "INTEGER NOT NULL, ";
+                        NoteEntry.COLUMN_TYPE   + " INTEGER NOT NULL, " +
 
-        final String SQL_CREATE_NOTE_TYPE_TABLE =
+                        NoteEntry.CREATION_DATE   + " VARCHAR(20) NOT NULL, " +
 
-                "CREATE TABLE " + NoteTypeEntry.TABLE_NAME + " (" +
+                        NoteEntry.ALARM_DATE   + " VARCHAR(20) )";
 
-                        NoteTypeEntry._ID               + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
-                        NoteTypeEntry.COLUMN_NAME       + " VARCHAR(20) NOT NULL, ";
-
-        sqLiteDatabase.execSQL(SQL_CREATE_NOTE_TYPE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_NOTE_TABLE);
-        sqLiteDatabase.execSQL("INSERT INTO "+ NoteTypeEntry.TABLE_NAME + "(name) values('text')");
-        sqLiteDatabase.execSQL("INSERT INTO "+ NoteTypeEntry.TABLE_NAME + "(name) values('image')");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("drop table " + NoteEntry.TABLE_NAME);
+        onCreate(db);
     }
 }

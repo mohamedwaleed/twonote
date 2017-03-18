@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">twonote</string>
+    <string name="action_backup">نسخه احتياطيه</string>
+    <string name="empty_title">عنوان الملحوظه يجب ان يكون ممتلىء</string>
+    <string name="long_title">عنوان الملحوظه يجب ان يكون اقل من عشرين حرفاً</string>
+    <string name="delete_error">خطأ فى مسح الملحوظه</string>
+    <string name="text">نص</string>
+    <string name="image">صوره</string>
+    <string name="title">عنوان الملحوظه</string>
+    <string name="desc">الوصف</string>
+</resources>

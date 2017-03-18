@@ -28,9 +28,12 @@ public class NoteContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+    public int delete(Uri uri, String where, String[] whereArgs) {
+        int rowAffected =  noteDbHelper.getWritableDatabase().delete(NoteContract.NoteEntry.TABLE_NAME, where, whereArgs);
+        if (rowAffected > 0){
+            getContext().getContentResolver().notifyChange(NoteContract.NoteEntry.CONTENT_URI, null);
+        }
+        return rowAffected;
     }
 
     @Override
@@ -42,8 +45,20 @@ public class NoteContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        long rowInserted = 0;
+        switch (uriMatcher.match(uri)) {
+            case CODE_NOTES:
+                rowInserted = noteDbHelper.getWritableDatabase().insert(NoteContract.NoteEntry.TABLE_NAME,null,values);
+                if(rowInserted == -1){
+                    throw new IllegalArgumentException("Insert error");
+                }else {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("");
+        }
+        return uri.withAppendedPath(uri, String.valueOf(rowInserted));
     }
 
     @Override
@@ -55,14 +70,32 @@ public class NoteContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        // TODO: Implement this to handle query requests from clients.
-        throw new UnsupportedOperationException("Not yet implemented");
+        Cursor cursor;
+        switch (uriMatcher.match(uri)) {
+            case CODE_NOTES:
+               cursor = noteDbHelper.getReadableDatabase().query(NoteContract.NoteEntry.TABLE_NAME,
+                        projection,
+                        selection,selectionArgs,null,null,sortOrder);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+    public int update(Uri uri, ContentValues values, String where,
+                      String[] whereArgs) {
+        int rowAffected = 0;
+        switch (uriMatcher.match(uri)) {
+            case CODE_NOTES:
+                rowAffected = noteDbHelper.getWritableDatabase().update(NoteContract.NoteEntry.TABLE_NAME, values, where, whereArgs);
+                getContext().getContentResolver().notifyChange(uri, null);
+                break;
+            default:
+                throw new UnsupportedOperationException("");
+        }
+        return rowAffected;
     }
 }
