@@ -8,4 +8,5 @@
     <string name="image">IMAGE</string>
     <string name="title">Title</string>
     <string name="desc">Description</string>
+    <string name="add_note">Add note</string>
 </resources>

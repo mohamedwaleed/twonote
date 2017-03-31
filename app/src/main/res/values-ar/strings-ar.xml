@@ -9,4 +9,6 @@
     <string name="image">صوره</string>
     <string name="title">عنوان الملحوظه</string>
     <string name="desc">الوصف</string>
+    <string name="add_note">أضافه ملحوظه</string>
+
 </resources>
