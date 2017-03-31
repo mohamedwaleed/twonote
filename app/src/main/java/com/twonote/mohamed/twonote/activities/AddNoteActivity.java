@@ -88,7 +88,11 @@ public class AddNoteActivity extends AppCompatActivity {
 
                 if(selectedDate != null && selectedTime != null) {
                     Log.e("Eee", alarmDateTime);
-                    NotificationUtility.scheduleNoteAlarm(this, noteTitle, noteDescription, alarmDateTime, currentDate, noteId);
+                    try {
+                        NotificationUtility.scheduleNoteAlarm(this, noteTitle, noteDescription, alarmDateTime, currentDate, noteId);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 break;

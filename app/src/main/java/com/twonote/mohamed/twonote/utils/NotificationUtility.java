@@ -13,13 +13,16 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.twonote.mohamed.twonote.R;
 import com.twonote.mohamed.twonote.activities.NoteDetailsActivity;
 import com.twonote.mohamed.twonote.db.NoteContract;
 import com.twonote.mohamed.twonote.receivers.NoteReceiver;
 
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by mohamed on 18/03/17.
@@ -79,7 +82,7 @@ public class NotificationUtility {
     }
 
 
-    public static void scheduleNoteAlarm(Context context, String noteTitle, String noteDescription, String alarmDateTime, String currentDate, int noteId) {
+    public static void scheduleNoteAlarm(Context context, String noteTitle, String noteDescription, String alarmDateTime, String currentDate, int noteId) throws ParseException {
         Calendar selectedDate = Calendar.getInstance();
         selectedDate.set(Calendar.YEAR, selectedDate.get(Calendar.YEAR));
         selectedDate.set(Calendar.MONTH, selectedDate.get(Calendar.MONTH));
@@ -87,6 +90,9 @@ public class NotificationUtility {
         selectedDate.set(Calendar.HOUR_OF_DAY, selectedDate.get(Calendar.HOUR_OF_DAY));
         selectedDate.set(Calendar.MINUTE, selectedDate.get(Calendar.MINUTE));
 
+        Date alarmDate = DateUtility.getDataObject(alarmDateTime,"dd-MMM-yyyy hh:mm a");
+
+        Log.e("date" , alarmDate.toString());
         Intent intent = new Intent(context, NoteReceiver.class);
         intent.putExtra(NoteContract.NoteEntry._ID, noteId);
         intent.putExtra(NoteContract.NoteEntry.COLUMN_TITLE, noteTitle);
@@ -98,6 +104,6 @@ public class NotificationUtility {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, selectedDate.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDate.getTime(), pendingIntent);
     }
 }

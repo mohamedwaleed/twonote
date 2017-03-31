@@ -1,18 +1,13 @@
 package com.twonote.mohamed.twonote.activities;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,8 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.text.TextRecognizer;
+import com.github.clans.fab.FloatingActionButton;
 import com.twonote.mohamed.twonote.R;
 import com.twonote.mohamed.twonote.adapters.NotesAdapter;
 import com.twonote.mohamed.twonote.db.NoteContract;
@@ -63,103 +56,89 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton textNoteFab = (FloatingActionButton) findViewById(R.id.textFab);
+        textNoteFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder mbuilder = new AlertDialog.Builder(MainActivity.this);
-                View mView = getLayoutInflater().inflate(R.layout.note_type_dialog_layout, null);
-                Button addTextNoteButton = (Button) mView.findViewById(R.id.textNote);
 
-                addTextNoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();
-                        Intent intent = new Intent(MainActivity.this,AddNoteActivity.class);
-                        intent.putExtra(Intent.EXTRA_TEXT, NoteType.TEXT);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-                    }
-                });
+                Intent intent = new Intent(MainActivity.this,AddNoteActivity.class);
+                intent.putExtra(Intent.EXTRA_TEXT, NoteType.TEXT);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
 
 
-                Button addImageNoteButton = (Button) mView.findViewById(R.id.imageNote);
-
-                addImageNoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                            alertDialog.dismiss();
 
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                            builder.setTitle(getString(R.string.title));
-                            final EditText input = new EditText(MainActivity.this);
-                            input.setInputType(InputType.TYPE_CLASS_TEXT);
-                            builder.setView(input);
 
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String noteTitle = input.getText().toString();
 
-                                    if(noteTitle.isEmpty()) {
-                                        Toast.makeText(MainActivity.this, R.string.empty_title,Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }else if(noteTitle.length() > 20){
-                                        Toast.makeText(MainActivity.this, R.string.long_title,Toast.LENGTH_SHORT).show();
-                                        return ;
-                                    }
-
-                                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-                                        File photoFile = null;
-                                        try {
-                                            photoFile = createImageFile();
-                                        } catch (IOException ex) {
-                                            Toast.makeText(MainActivity.this, "Can not create image file",Toast.LENGTH_SHORT).show();
-                                        }
-                                        // Continue only if the File was successfully created
-                                        if (photoFile != null) {
-                                            Uri photoURI = FileProvider.getUriForFile(MainActivity.this,
-                                                    "com.example.android.fileprovider",
-                                                    photoFile);
-                                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
-                                            String currentDate = DateUtility.getCurrentDate("dd-MMM-yyyy");
-
-                                            ContentValues contentValues = new ContentValues();
-                                            contentValues.put(NoteContract.NoteEntry.COLUMN_TITLE, noteTitle);
-                                            contentValues.put(NoteContract.NoteEntry.COLUMN_DESCRIPTION, photoFile.getAbsolutePath());
-                                            contentValues.put(NoteContract.NoteEntry.COLUMN_TYPE, NoteType.IMAGE);
-                                            contentValues.put(NoteContract.NoteEntry.CREATION_DATE, currentDate);
-                                            getContentResolver().insert(NoteContract.NoteEntry.CONTENT_URI, contentValues);
-                                        }
-                                    }
-
-                                }
-                            });
-                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                            builder.show();
-
-                    }
-                });
-
-                mbuilder.setView(mView);
-                alertDialog = mbuilder.create();
-                alertDialog.show();
 
             }
         });
 
+        FloatingActionButton imageNoteFab = (FloatingActionButton) findViewById(R.id.imageFab);
 
+        imageNoteFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getString(R.string.title));
+                final EditText input = new EditText(MainActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String noteTitle = input.getText().toString();
+
+                        if(noteTitle.isEmpty()) {
+                            Toast.makeText(MainActivity.this, R.string.empty_title,Toast.LENGTH_SHORT).show();
+                            return;
+                        }else if(noteTitle.length() > 20){
+                            Toast.makeText(MainActivity.this, R.string.long_title,Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
+
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+                            File photoFile = null;
+                            try {
+                                photoFile = createImageFile();
+                            } catch (IOException ex) {
+                                Toast.makeText(MainActivity.this, "Can not create image file",Toast.LENGTH_SHORT).show();
+                            }
+                            // Continue only if the File was successfully created
+                            if (photoFile != null) {
+                                Uri photoURI = FileProvider.getUriForFile(MainActivity.this,
+                                        "com.example.android.fileprovider",
+                                        photoFile);
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+                                String currentDate = DateUtility.getCurrentDate("dd-MMM-yyyy");
+
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(NoteContract.NoteEntry.COLUMN_TITLE, noteTitle);
+                                contentValues.put(NoteContract.NoteEntry.COLUMN_DESCRIPTION, photoFile.getAbsolutePath());
+                                contentValues.put(NoteContract.NoteEntry.COLUMN_TYPE, NoteType.IMAGE);
+                                contentValues.put(NoteContract.NoteEntry.CREATION_DATE, currentDate);
+                                getContentResolver().insert(NoteContract.NoteEntry.CONTENT_URI, contentValues);
+                            }
+                        }
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_notes);
 
