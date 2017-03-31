@@ -24,6 +24,7 @@ public class NoteContract {
         public static final String COLUMN_TYPE = "type";
         public static final String CREATION_DATE = "creation_date";
         public static final String ALARM_DATE = "alarm_date";
+        public static final String ALARM_ID = "alarm_id";
     }
 
     public static final class NoteTypeEntry implements BaseColumns {

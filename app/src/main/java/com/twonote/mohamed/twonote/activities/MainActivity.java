@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import com.twonote.mohamed.twonote.adapters.NotesAdapter;
 import com.twonote.mohamed.twonote.db.NoteContract;
 import com.twonote.mohamed.twonote.utils.DateUtility;
 import com.twonote.mohamed.twonote.utils.NoteType;
+import com.twonote.mohamed.twonote.utils.NotificationUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int INDEX_NOTE_ID = 0;
     public static final int INDEX_DESCRIPTION_TITLE = 2;
     public static final int INDEX_NOTE_ALARM_DATE = 5;
+    public static final int INDEX_NOTE_ALARM_ID = 6;
     private static AlertDialog alertDialog;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int INDEX_NOTE_TITLE = 1;
@@ -194,6 +197,11 @@ public class MainActivity extends AppCompatActivity {
     public int deleteNote(Integer itemId) {
         String where = "_id=?";
         String [] whereArgs = {itemId.toString()};
+        Cursor cursor = getContentResolver().query(NoteContract.NoteEntry.CONTENT_URI, null , where, whereArgs , null);
+        cursor.moveToFirst();
+        Integer alarmId = cursor.getInt(INDEX_NOTE_ALARM_ID);
+        Log.e("alarm id" , String.valueOf(alarmId));
+        NotificationUtility.cancelNoteAlarm(this, alarmId);
         return getContentResolver().delete(NoteContract.NoteEntry.CONTENT_URI, where, whereArgs );
     }
     private File createImageFile() throws IOException {

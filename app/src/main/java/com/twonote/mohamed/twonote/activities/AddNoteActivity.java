@@ -71,10 +71,12 @@ public class AddNoteActivity extends AppCompatActivity {
                 }
 
                 String alarmDateTime = null;
+                Integer alarmId = null;
                 if(selectedDate != null && selectedTime != null){
                     alarmDateTime = selectedDate + " " + selectedTime;
+                    alarmId = 1 + (int)(Math.random() * 10000);
                 }
-
+                Log.e("alarm id" , String.valueOf(alarmId));
                 String currentDate = DateUtility.getCurrentDate("dd-MMM-yyyy");
 
                 ContentValues contentValues = new ContentValues();
@@ -83,13 +85,14 @@ public class AddNoteActivity extends AppCompatActivity {
                 contentValues.put(NoteContract.NoteEntry.COLUMN_TYPE, NoteType.TEXT);
                 contentValues.put(NoteContract.NoteEntry.CREATION_DATE, currentDate);
                 contentValues.put(NoteContract.NoteEntry.ALARM_DATE, alarmDateTime);
+                contentValues.put(NoteContract.NoteEntry.ALARM_ID, alarmId);
                 Uri uri = getContentResolver().insert(NoteContract.NoteEntry.CONTENT_URI, contentValues);
                 int noteId = (int) ContentUris.parseId(uri);
 
                 if(selectedDate != null && selectedTime != null) {
                     Log.e("Eee", alarmDateTime);
                     try {
-                        NotificationUtility.scheduleNoteAlarm(this, noteTitle, noteDescription, alarmDateTime, currentDate, noteId);
+                        NotificationUtility.scheduleNoteAlarm(this, noteTitle, noteDescription, alarmDateTime, currentDate, noteId , alarmId);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

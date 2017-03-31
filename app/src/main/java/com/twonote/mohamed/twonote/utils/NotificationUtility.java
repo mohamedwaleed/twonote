@@ -82,7 +82,7 @@ public class NotificationUtility {
     }
 
 
-    public static void scheduleNoteAlarm(Context context, String noteTitle, String noteDescription, String alarmDateTime, String currentDate, int noteId) throws ParseException {
+    public static void scheduleNoteAlarm(Context context, String noteTitle, String noteDescription, String alarmDateTime, String currentDate, int noteId, Integer alarmId) throws ParseException {
         Calendar selectedDate = Calendar.getInstance();
         selectedDate.set(Calendar.YEAR, selectedDate.get(Calendar.YEAR));
         selectedDate.set(Calendar.MONTH, selectedDate.get(Calendar.MONTH));
@@ -100,10 +100,24 @@ public class NotificationUtility {
         intent.putExtra(NoteContract.NoteEntry.COLUMN_TYPE, NoteType.TEXT);
         intent.putExtra(NoteContract.NoteEntry.CREATION_DATE, currentDate);
         intent.putExtra(NoteContract.NoteEntry.ALARM_DATE, alarmDateTime);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1253, intent, PendingIntent.FLAG_UPDATE_CURRENT | Intent.FILL_IN_DATA);
+        intent.putExtra(NoteContract.NoteEntry.ALARM_ID, alarmId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDate.getTime(), pendingIntent);
     }
+
+
+    public static void cancelNoteAlarm(Context context, Integer alarmId)  {
+
+        Intent intent = new Intent(context, NoteReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.cancel(pendingIntent);
+    }
+
 }

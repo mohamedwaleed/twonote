@@ -42,6 +42,7 @@ public class NoteReceiver extends BroadcastReceiver {
         ContentValues contentValues = new ContentValues();
         String nullValue = null;
         contentValues.put(NoteContract.NoteEntry.ALARM_DATE, nullValue);
+        contentValues.put(NoteContract.NoteEntry.ALARM_ID, nullValue);
 
         String where = NoteContract.NoteEntry._ID + "=?";
         String [] whereArgs = {String.valueOf(noteId)};
