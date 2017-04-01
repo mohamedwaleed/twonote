@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -48,7 +50,7 @@ public class AddNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_note);
     }
 
-    public void addNote(View view){
+    public void addNote(){
 
         Intent intent = getIntent();
         int noteType = intent.getIntExtra(Intent.EXTRA_TEXT, 1);
@@ -107,7 +109,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
 
 
-    public void setAlarm(View view) {
+    public void setAlarm() {
 
         this.selectedDate = null;
         this.selectedTime = null;
@@ -244,5 +246,28 @@ public class AddNoteActivity extends AppCompatActivity {
         }
 
         alarmDialog.dismiss();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.add_note_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.set_alarm) {
+            setAlarm();
+            return true;
+        }else if(id == R.id.save_note) {
+            addNote();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -10,5 +10,8 @@
     <string name="title">عنوان الملحوظه</string>
     <string name="desc">الوصف</string>
     <string name="add_note">أضافه ملحوظه</string>
+    <string name="save">حفظ</string>
+    <string name="edit">تعديل</string>
+    <string name="updated">تم تعديل الملحوظه</string>
 
 </resources>

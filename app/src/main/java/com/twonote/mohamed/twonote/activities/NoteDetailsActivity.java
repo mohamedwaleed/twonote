@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -69,5 +71,30 @@ public class NoteDetailsActivity extends AppCompatActivity {
         String selection = NoteContract.NoteEntry._ID + "=?";
         String [] selectionArgs = {String.valueOf(noteId)};
         return getContentResolver().query(NoteContract.NoteEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.note_details_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.edit) {
+            Intent intent = getIntent();
+            int noteId = intent.getIntExtra(NoteContract.NoteEntry._ID, 1);
+            int noteType = intent.getIntExtra(NoteContract.NoteEntry.COLUMN_TYPE, 1);
+
+            Intent editNoteIntent = new Intent(this, EditNoteActivity.class);
+            editNoteIntent.putExtra(NoteContract.NoteEntry._ID, noteId);
+            editNoteIntent.putExtra(NoteContract.NoteEntry.COLUMN_TYPE, noteType);
+            startActivity(editNoteIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

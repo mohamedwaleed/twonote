@@ -9,4 +9,7 @@
     <string name="title">Title</string>
     <string name="desc">Description</string>
     <string name="add_note">Add note</string>
+    <string name="save">save</string>
+    <string name="edit">edit</string>
+    <string name="updated">edited successfully</string>
 </resources>
